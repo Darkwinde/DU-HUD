@@ -1,5 +1,5 @@
 # About
-Dual Universe minimalized HUD for Atmospheric and Space navigation
+Dual Universe minimalistic HUD for Atmospheric and Space navigation
 
 
 # Credits
