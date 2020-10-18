@@ -1,8 +1,11 @@
 # About
 Dual Universe minimalized HUD for Atmospheric and Space navigation
 
+
 # Credits
-Dimencia and his HUD implementation with many features, like interplanetary autopilot, automatic landing, door automatation fuel information: https://github.com/Dimencia/DU-Orbital-Hud
+* Based on Dimencia and his HUD implementation with extraordinary features; like interplanetary autopilot, automatic landing, door automatation or fuel information. Check out his space: https://github.com/Dimencia/DU-Orbital-Hud
+* Expugnator for his collaborative work on this HUD implementation to keep it simple and stupid for all Dual Universe planet crash drivers :)
+
 
 # Features
 
