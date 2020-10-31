@@ -8,6 +8,10 @@ Dual Universe minimalistic HUD for Atmospheric and Space navigation
 
 
 # Features
-
+* Handbrake (Option 1)
+* Full vertical trust (Option 2)  - experimental
+* Auto landing gear by telemeter trigger
+* Low altitude stabilization below 14m to surface
+* Start / Stop toggle switch for door and force field
 
 # Installation
