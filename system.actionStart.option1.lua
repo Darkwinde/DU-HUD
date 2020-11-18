@@ -1,21 +1,28 @@
 -- Darkwinde START: system.actionStart(option 1)
 -- >> Option 1 is by default ALT+1
 
-
--- FEATURE START: brake
+-- Take off script by releasing brake and setting altitude level
 lockBrake = not lockBrake
-brakeInput = 0
 
 
-if not lockBrake then 
-    Nav.control.setEngineThrust("booster_engine", 1)
+if not lockBrake then
+    local environmentParameter = getEnvironmentParameter(environmentID)
     
-    Nav.axisCommandManager:setTargetGroundAltitude(15)
-    Nav.axisCommandManager:activateGroundEngineAltitudeStabilization(15)
+    
+    Nav.control.setEngineThrust("vertical, thrust", 1) -- default tags are in lower case
 
+    Nav.axisCommandManager:setTargetGroundAltitude(environmentParameter["surfaceDistanceLow"])
+    Nav.axisCommandManager:activateGroundEngineAltitudeStabilization(environmentParameter["surfaceDistanceLow"])
+
+    
+    brakeInput = 0
+ 
+    if firstStart then
+        setHTMLMessage(hudHTMLMsg, "TAKE OFF \n Have a nice flight!")
+    end
 end
 
 
--- FEATURE END: brake
+
 
 -- Darkwinde END: system.actionStart(option 1)
