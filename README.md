@@ -3,7 +3,8 @@ Dual Universe minimalistic HUD for Atmospheric and Space navigation
 <br/><br/>
 
 ## Credits
-* Based on Dimencia and his HUD implementation with extraordinary features; like interplanetary autopilot, automatic landing, door automatation or fuel information. Check out his space: https://github.com/Dimencia/DU-Orbital-Hud
+* Inspired and based on Dimencia's HUD implementation with extraordinary features; like interplanetary autopilot, automatic landing, door automation or fuel information. Check out his space: https://github.com/Dimencia/DU-Orbital-Hud
+* JayleBreak and his orbital maths/atlas - https://gitlab.com/JayleBreak/dualuniverse/-/tree/master/DUflightfiles/autoconf/custom
 * Expugnator for his collaborative work on this HUD implementation to keep it simple and stupid for all Dual Universe planet crash drivers :)
 <br/><br/>
 
@@ -27,7 +28,7 @@ Dual Universe minimalistic HUD for Atmospheric and Space navigation
 <br/><br/>
 
 **Optional**
-* Button "Manual Switch" to control "Door" and "Forcefield" by a "Relay".
+* Button "Manual Switch" to control "Door" and "Force Field" by a "Relay".
      1. "Manual Switch" is linked to the "Relay".
      1. The "Relay" is linked to the "Door" and "Force Field"
      1. Pushing the "Manual Switch" the door opens / closes and the force field is been activated / deactivated
@@ -38,7 +39,7 @@ Dual Universe minimalistic HUD for Atmospheric and Space navigation
 1. Run auto configuration script 
     1. Right click on commander seat
     1. Select "Run default autoconfigure" > "(Pilot) Flying construct"
-1. Ensure that "Telemeter" element is linked to the commander seat. In case you are using a "Manual Switch" to control a door and dorce field by a relay, then name it to "btnDoor" in the LUA editor
+1. Ensure that "Telemeter" element is linked to the commander seat. In case you are using a "Manual Switch" to control a door and force field by a relay, then name it to "btnDoor" in the LUA editor
 ![Lua 1](/media/LuaEditor_1.png)
 <br/><br/>
 
@@ -77,8 +78,8 @@ Example for the file "library.start.lua":<br/>
 
 ## Usage
 1. For take off or landing action near a surface, use hotkey "Option 1". Game control default for this is "ALT + 1"
-1. After take off, low altitude stabilization (LAS) takes action. LAS means lifting ship to a certain level (atmosphere 15m, space 5m) and holding it by braks not to drift away. To get out of LAS gain an additional meter of lift (e.g. pressing space) and you are free to fly.
-1. You can controll thrust as usual. As braks are active on LAS, you could perform a small kick start like: 
+1. After take off, low altitude stabilization (LAS) takes action. LAS means lifting ship to a certain level (atmosphere 15m, space 5m) and holding it by brakes not to drift away. To get out of LAS gain an additional meter of lift (e.g. pressing space) and you are free to fly.
+1. You can control thrust as usual. As brakes are active on LAS, you could perform a small kick start like: 
 <br/>> Set thrust to 100%
 <br/>> Wait until you start drifting forward
 <br/>> Press space to gain an additional meter height.
@@ -115,8 +116,9 @@ Example for the file "library.start.lua":<br/>
 * Artificial Horizon / Gyro Horizon / Attitude Indicator
 <br/><br/>
 
-## Known Issues
+## Known Issues & Limitations
 * Pressing "TAB" to call native game overlay with sidebar and after mouse click on the gray overlay will cause massive lags
     * Also reproducible with other HTML overlays. 
     Therefor looks like a general issue from the game / design mechanic.
     * Will try to figure out, if replacing relevant information gives better performance instead of re-building overlay all the time
+* Not tested with cockpits
