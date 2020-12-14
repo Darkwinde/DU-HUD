@@ -6,16 +6,11 @@ lockBrake = not lockBrake
 
 
 if not lockBrake then
-    local environmentParameter = getEnvironmentParameter(environmentID)
-    
-    
-    Nav.control.setEngineThrust("vertical, thrust", 1) -- default tags are in lower case
-
-    Nav.axisCommandManager:setTargetGroundAltitude(environmentParameter["surfaceDistanceLow"])
-    Nav.axisCommandManager:activateGroundEngineAltitudeStabilization(environmentParameter["surfaceDistanceLow"])
-
-    
     brakeInput = 0
+    
+    local environmentParameter = getEnvironmentParameter(environmentID)        
+    unit.setEngineThrust("vertical thrust", 1) -- default tags are in lower case    
+    unit.activateGroundEngineAltitudeStabilization(environmentParameter["surfaceDistanceLow"])
  
     if firstStart then
         setHTMLMessage(hudHTMLMsg, "TAKE OFF \n Have a nice flight!")

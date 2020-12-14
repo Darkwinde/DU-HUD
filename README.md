@@ -8,11 +8,17 @@ Dual Universe minimalistic HUD for Atmospheric and Space navigation
 <br/><br/>
 
 ## Features
-* Handbrake (Option 1)
+* Option 1 key bind (ALT + 1) 
+    * Auto take off and landing near surface
+    * Free flight activate / deactivate handbrake
+* Orbital overlay near planet
 * Auto landing gear by telemeter trigger
-* Low altitude stabilization with safe landing
+* Low altitude stabilization for safe landing
 * Button switch toggle for door and force field
 * Space docking indicator / message
+* Show estimated distance to surface
+* Show estimated possible remaining payload based on current atmospheric environment and ship parameter
+ * Show vertical velocity
 <br/><br/>
 
 ## Prerequisite
@@ -24,7 +30,8 @@ Dual Universe minimalistic HUD for Atmospheric and Space navigation
 * Button "Manual Switch" to control "Door" and "Forcefield" by a "Relay".
      1. "Manual Switch" is linked to the "Relay".
      1. The "Relay" is linked to the "Door" and "Force Field"
-     1. Pushing the button the door opens / closes and the force field is been activated / deactivated
+     1. Pushing the "Manual Switch" the door opens / closes and the force field is been activated / deactivated
+     1. "Manual Switch" is linked to the command seat and slot is named "btnDoor" in the LUA editor
 <br/><br/>
 
 ## Installation
@@ -35,8 +42,6 @@ Dual Universe minimalistic HUD for Atmospheric and Space navigation
 ![Lua 1](/media/LuaEditor_1.png)
 <br/><br/>
 
-From this point on, you can choose between two ways...
-<br/><br/>
 
 **File by File** 
 <br/>
@@ -48,13 +53,15 @@ Copy and past each LUA file content to the according section of your commander s
 Example for the file "library.start.lua":<br/>
 
 1. Open the file and copy content to the clipboard
-1. According to the filename "**library**.start.lua" select the category "library".
-1. According to the filename "library.**start**.lua" we need an event filter of type "start" without parameter; so we are looking for "start()" as event filter name.
+1. According to the filename "**library**.start_1.lua" select the category "library".
+1. According to the filename "library.**start**_1.lua" we need an event filter of type "start" without parameter; so we are looking for "start()" as event filter name.
     1. To create a new filter press "+ ADD FILTER"
     1. To select event filter type, click on three dots on the left side of the draft event and select "start".
     1. The draft event changes to "start()" 
 1. Click into the right field and past content from clipboard by pressing "CTRL+V".
-1. Do the same process with every further "*.lua" file. Important to note, that you can define multiple filter targeting same event, e.g. the "start()". They will be processed all one by one; so do noty worry about :)
+1. Do the same process with every further "*.lua" file.    
+    * Important to note, that you can define multiple filter targeting same event, e.g. the "start()". They will be processed all one by one; so do not worry about :)
+    * If I have defined multiple filter targeting the same event, they are distinguished by a underscore plus counter. E.g.: library.start_**1**.lua and library.start_**2**.lua would mean you have two start() filter in library.
 1. Then you finished, do not forget set press "APPLY" to confirm changes.
 1. Take a seat and have a nice flight.
 <br/><br/>
@@ -67,15 +74,6 @@ Example for the file "library.start.lua":<br/>
 ![Lua 1](/media/LuaEditor_4.png)
 <br/><br/>
 
-**Clipboard**
-1. Open file "clipboard.conf".
-1. Copy the whole content to your clipboard. Recommanded to use "raw" format.
-1. Ingame, perform right click on commander seat and select "Advanced > Past Lua configuration from clipboard" 
-<br/><br/>
-
-## Remarks
-1. Configuration parameters are not exposed (topic for upcoming release). To change default parameters, you have to open the ingame editor and go to "unit" > "start()".
-<br/><br/>
 
 ## Usage
 1. For take off or landing action near a surface, use hotkey "Option 1". Game control default for this is "ALT + 1"
@@ -92,14 +90,29 @@ Example for the file "library.start.lua":<br/>
 ![Take Off](/media/TakeOff.png)
 <br/><br/>
 
-![Space Flight](/media/SpaceFlight.png)
-<br/><br/>
-
 ![Spacedock](/media/Docking.png)
 <br/><br/>
 
+![Space Flight](/media/SpaceFlight_1.png)
+<br/><br/>
+
+![Space Flight](/media/SpaceFlight_2.png)
+<br/><br/>
+
+![Space Flight](/media/SpaceFlight_3.png)
+<br/><br/>
+
+![Space Flight](/media/AtmoFlight_1.png)
+<br/><br/>
+
+![Space Flight](/media/AtmoFlight_2.png)
+<br/><br/>
+
+![Space Flight](/media/AtmoFlight_3.png)
+<br/><br/>
+
 ## Upcoming Features
-* Orbital overlay to show apoapsis, periapsis, apogee, perigee, eccentricity for the nearest planet, using these libraries: https://gitlab.com/JayleBreak/dualuniverse/-/tree/master/DUflightfiles/autoconf/custom
+* Artificial Horizon / Gyro Horizon / Attitude Indicator
 <br/><br/>
 
 ## Known Issues

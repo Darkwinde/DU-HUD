@@ -1,18 +1,10 @@
 -- Darkwinde START: unit.stop()
 
-
--- FEATURE START: closeDoor
-
 local environmentParameter = getEnvironmentParameter(environmentID)
-
-if velocity <= environmentParameter["surfaceSpeedLow"] and 
-   round(telemeter.getDistance()) <= environmentParameter["surfaceDistanceLow"] then 
-    btnDoor.activate()
+if doorSwitch ~= nil and velocity_kmh <= environmentParameter["surfaceSpeedLow"] and 
+    round(telemeter.getDistance()) <= environmentParameter["surfaceDistanceLow"] then 
+    doorSwitch.activate()
 end
 
-
-
 unit.stopTimer('HUD')
-
-
 -- Darkwinde END: unit.start()
