@@ -301,8 +301,8 @@ function getFuelTanks()
         local hp = core.getElementMaxHitPointsById(el)
         local emptyMass, curMass, maxVolume, curVolume, consVolume, consTime = 0, 0, 0, 0, 0, "0h:0m:0s"
         local curTime = system.getTime()
-        -- Define fuel tank skills for later use by reference
-        local fuelTankSkills = {["atmospheric fuel tank"] = ftoAtmo, ["space fuel tank"] = ftoSpace, ["rocket fuel tank"] = ftoRocket}
+        -- Define fuel tank handling skills for later use by reference
+        local fuelTankSkills = {["atmospheric fuel tank"] = fthAtmo, ["space fuel tank"] = fthSpace, ["rocket fuel tank"] = fthRocket}
 
         -- Check if element is the one we are searching for (defined in the array)
         if fuelTanks[typ] ~= nil then
@@ -313,23 +313,31 @@ function getFuelTanks()
 
             -- Get fuel tank parameter
             local size = "XS" -- default size     
-            if hp >= fuelTanks[typ]["L"]["hp"] then 
+            if hp >= fuelTanks[typ]["L"]["hp"] then
                 size = "L"
-            elseif hp >= fuelTanks[typ]["M"]["hp"] then 
+            elseif hp >= fuelTanks[typ]["M"]["hp"] then
                 size = "M"
-            elseif hp >= fuelTanks[typ]["S"]["hp"] then 
+            elseif hp >= fuelTanks[typ]["S"]["hp"] then
                 size = "S"
             end
 
-            emptyMass = round(fuelTanks[typ][size]["mass"])
-            curMass = round(mass - emptyMass, 2)
-            maxVolume = round(fuelTanks[typ][size]["volume"])
-            curVolume = round(curMass / fuel[typ], 2)
-
-            -- Check and apply for fuel tank skills
+            
+             -- Calculate tank mass
+            emptyMass = fuelTanks[typ][size]["mass"]
+            curMass = mass - emptyMass
+            
+            
+            -- looks like a bug on fuel tanks mass reduction as container optimization also is impacting 
+            ftoVolume = (1 - fto * (0.05)) * (1 - coo * (0.05))
+            maxVolume = fuelTanks[typ][size]["volume"]
+            curVolume = round(curMass / (fuel[typ] * ftoVolume), 2) 
+            
+            
+            -- Check and apply for fuel tank handling skills (Piloting)
             if fuelTankSkills[typ] > 0 and fuelTankSkills[typ] ~= nil then
-                maxVolume = maxVolume * (1 + fuelTankSkills[typ] * 0.2)
+                maxVolume = fuelTanks[typ][size]["volume"] * (1 + fuelTankSkills[typ] * 0.2)
             end
+                      
 
             -- Add fuel tank information to my personal list
             returnValue[typ][#returnValue[typ] + 1] = {["id"]=el, ["name"]=name, ["maxvolume"]=maxVolume, ["curvolume"]=curVolume, ["emptymass"]=emptyMass, ["curmass"]=curMass, ["consvolume"]=consVolume, ["constime"]=consTime, ["time"]=curTime}

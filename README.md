@@ -117,7 +117,7 @@ Example for the file "library.start.lua":<br/>
 <br/><br/>
 
 ## Known Issues & Limitations
-* Pressing "TAB" to call native game overlay with sidebar and after mouse click on the gray overlay will cause massive lags
+* Pressing "TAB" to call native game overlay with sidebar (mouse mode) and after mouse click on the gray overlay will cause massive lags
     * Also reproducible with other HTML overlays. 
     Therefor looks like a general issue from the game / design mechanic.
     * Will try to figure out, if replacing relevant information gives better performance instead of re-building overlay all the time

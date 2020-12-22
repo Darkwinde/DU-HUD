@@ -1,3 +1,14 @@
+Version 0.2.1
+* Bugfixes
+    * Corrected HUD refresh rate from 1.5s to 0.5s
+    * Corrected Fuel Tank Optimization to Fuel Tank Handling (Piloting) as it was intended
+    * Implementation of Fuel Tank Optimization (Mining & Inventory)
+    * Taking into account that Container Optimization also impacting Fuel Tank mass reduction
+    * Increased default payload overhead from 10% to 25%
+
+
+---
+
 Version 0.2
 * Usage of Telemeter Unit is now mandatory
 * Integration of Orbital Widget
@@ -19,10 +30,9 @@ Version 0.2
 * Dynamic information change between space and atmospheric
 * Bugfixes
     * Altitude stabilization was reset on environmental change (space <> atmospheric)
-    * Taking care, that space docks (static space cores) have different glabal gravity
+    * Taking care, that space docks (static space cores) have different global gravity values
     * Jumping time information for brake distance
     * Atmospheric brake workaround as not part of json.decode(unit.getData()).maxBrake 
-
 
 ---
 

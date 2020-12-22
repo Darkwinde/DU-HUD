@@ -12,7 +12,7 @@ for typ, tanks in pairs(myFuelTanks) do
         local emptyMass, curMass, maxVolume, curVolume, consVolume, consTime = 0, 0, 0, 0, 0, 0
         local curTime = system.getTime()
         -- Define fuel tank skills for later use by reference
-        local fuelTankSkills = {["atmospheric fuel-tank"] = ftoAtmo, ["space fuel-tank"] = ftoSpace, ["rocket fuel-tank"] = ftoRocket}
+        local fuelTankSkills = {["atmospheric fuel-tank"] = fthAtmo, ["space fuel-tank"] = fthSpace, ["rocket fuel-tank"] = fthRocket}
 
         
         -- Get fuel tank parameter
@@ -30,13 +30,15 @@ for typ, tanks in pairs(myFuelTanks) do
         emptyMass = round(fuelTanks[typ][size]["mass"])
         curMass = round(mass - emptyMass, 2)
 
-        -- Calculate fuel volume
-        maxVolume = round(fuelTanks[typ][size]["volume"])
-        curVolume = round(curMass / fuel[typ], 2)
+        
+        -- looks like a bug on fuel tanks mass reduction as container optimization also is impacting 
+        ftoVolume = (1 - fto * (0.05)) * (1 - coo * (0.05))
+        maxVolume = fuelTanks[typ][size]["volume"]
+        curVolume = round(curMass / (fuel[typ] * ftoVolume), 2) 
+        
 
         -- Calculate consumed fuel and remaining time until empty
         consVolume = parameter["curvolume"] - curVolume
-
         if consVolume > 0 then
             consTime = curVolume / (consVolume / (curTime - parameter["time"]))
         end
@@ -50,7 +52,7 @@ for typ, tanks in pairs(myFuelTanks) do
         consTime = h .. "h:" ..min .. "m:" .. sec .. "s"
 
 
-        -- Check and apply for fuel tank skills
+        -- Check and apply for fuel tank handling skills (Piloting)
         if fuelTankSkills[typ] ~= nil and fuelTankSkills[typ] > 0 then
             maxVolume = maxVolume * (1 + fuelTankSkills[typ] * 0.2)
         end
