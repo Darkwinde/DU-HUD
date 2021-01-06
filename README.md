@@ -13,6 +13,17 @@ Dual Universe minimalistic HUD for Atmospheric and Space navigation
 * Option 1 key bind (ALT + 1) 
     * Auto take off and landing near surface
     * Free flight activate / deactivate handbrake
+* Option 2 key bind (ALT + 2) 
+    * Toggle vertical engines on and off
+    * HUD indicator on activation by "(v)" as part the "Flight Style"
+* AGG Support
+    * Turn on and off by game default key bind (ALT + G)
+    * Increase target altitude by Option 8 key bind (ALT + 8)
+    * Decrease target altitude by Option 9 key bind (ALT + 9)
+    * Remark / Note
+        * Vertical engines (up and / or down) will try to stabilize the ship and work against AGG.<br>
+        Therefor, vertical engines are turned off (thrust level 0) during AGG is been activated. Longitudinal engines are untouched and operable.
+        * To reduce ship oscillation around target altitude, brakes are forced for a short time
 * Orbital overlay near planet
 * Auto landing gear by telemeter trigger
 * Low altitude stabilization for safe landing
