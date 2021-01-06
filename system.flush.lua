@@ -46,11 +46,35 @@ end
 
 
 
-
 -- In space it is not necessary to use engine stabilization / maneuver engine at high speed
-if environmentID == 2 and velocity_kmh > 2000 then
+if (environmentID == 2 and velocity_kmh > 5000) or not verticalEngines then
     unit.setEngineThrust("vertical thrust", 0)
     unit.deactivateGroundEngineAltitudeStabilization()
 end
 
+
+
+-- As we want the AGG to stabalize our altitude, we need to deactivate vertical engines
+if antigrav ~= nil then
+    local aggData = json.decode(antigrav.getData())
+    -- But only in case we are within AGG field, outside happy maneuver
+    if aggData.antiGPower > 0 then 
+        unit.setEngineThrust("vertical thrust", 0)
+        unit.deactivateGroundEngineAltitudeStabilization()
+        
+        -- Stop oscillate effect around target altitude
+        if aggAltitudeTarget == aggData.baseAltitude and core.g() < 0.015 and velocity_kmh >= 1 then
+            brakeInput = 1
+        else
+            
+            -- Stop oscillate effect by short braking on high amplitude level
+            -- Atmo brakes are not direcly at full force, therefor oscillate effect takes longer
+            if aggAltitudeTarget ~= aggData.baseAltitude and core.g() < 0.015 and velocity_kmh > 15 then
+                brakeInput = 1
+            else
+                brakeInput = 0
+            end
+        end  
+    end
+end
 -- Darkwinde END: system.flush()

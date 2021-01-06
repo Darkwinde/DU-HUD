@@ -1,3 +1,25 @@
+Version 0.3
+* AGG Support
+    * Turn on and off by game default key bind (ALT + G)
+    * Increase target altitude by Option 8 key bind (ALT + 8)
+    * Decrease target altitude by Option 9 key bind (ALT + 9)
+    * Remark / Note
+        * Vertical engines (up and / or down) will try to stabilize the ship and work against AGG.<br>
+        Therefor, vertical engines are turned off (thrust level 0) during AGG is been activated. Longitudinal engines are untouched and operable.
+        * To reduce ship oscillation around target altitude, brakes are forced for a short time
+* Bugfixes
+    * Corrected vertical space engine deactivation form 2000km/h to 5000km/h
+    * Docking will not work in cruise mode, therefor on docking message will switch over to travel mode now
+    * Activate hand brake on docking
+* Miscellaneous    
+    * Cleanup of unit.start() event to reflect only configurable items
+    * Default parameter initialization has been moved to a new init function called on start
+    * Display numbers in a more readable way (powered by Richard Warburton)
+    * Preparation for AGG screen extension
+    * Experimental: Deactivate vertical engines by Option 2 key bind (ALT + 2)
+
+---
+
 Version 0.2.1
 * Bugfixes
     * Corrected HUD refresh rate from 1.5s to 0.5s
@@ -5,7 +27,6 @@ Version 0.2.1
     * Implementation of Fuel Tank Optimization (Mining & Inventory)
     * Taking into account that Container Optimization also impacting Fuel Tank mass reduction
     * Increased default payload overhead from 10% to 25%
-
 
 ---
 

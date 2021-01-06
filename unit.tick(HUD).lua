@@ -16,13 +16,19 @@ planet = systemReference:closestBody(core.getConstructWorldPos())
 
 
 local hudHTMLBody = {}
-local hud_BrakeStatus = ternary(lockBrake, '<div class="on">on</div>', '<div class="off">off</div>')
+local hud_BrakeStatus = ternary(lockBrake, '<div class="on_r">on</div>', '<div class="off">off</div>')
 local hud_Environment = ''
 if environmentID == 3 then -- Spacedock
     hud_Environment = '<div style="color:#20b020; font-weight:bold;">' .. environment .. '</div>'
 
     if not firstStart then
+        -- Change to travel mode, as cruise will prevent final docking
+        if Nav.control.getControlMasterModeId() == 1 then
+            Nav.control.cancelCurrentControlMasterMode()
+        end
+        
         setHTMLMessage(hudHTMLMsg, "You are docked!!!", "ok")
+        lockBrake = true
         firstStart = not firstStart
     end
 else -- Atmo & Space
@@ -34,14 +40,16 @@ else -- Atmo & Space
 end
 
 
+
 --local hud_MaxThrust = round(Nav:maxForceForward() / 1000) .. 'kN'
-local hud_Throttle = ternary(Nav.axisCommandManager:getAxisCommandType(0) == 1, math.floor(unit.getThrottle() / 100) .. ' km/h', math.floor(unit.getThrottle()) .. '%')
-local hud_FlightStyle = ternary(Nav.axisCommandManager:getAxisCommandType(0) == 1, 'cruise', 'travel')
+local hud_Throttle = ternary(Nav.control.getControlMasterModeId() == 1, round(unit.getThrottle() / 100) .. ' km/h', round(unit.getThrottle()) .. '%')
+local hud_FlightStyle = ternary(Nav.control.getControlMasterModeId() == 1, 'cruise', 'travel')
+hud_FlightStyle = hud_FlightStyle .. ternary(verticalEngines, ' (v)', '')
 -- Space core gravity is slightly above 10m/s², display adjustment required
 local gravityAdjustment = ternary(environmentID == 3, 10, gravity) -- m/s²
 local hud_LocalGravity = round((core.g() / gravityAdjustment), 2) .. 'g'
-local hud_Altitude = round(core.getAltitude()) .. 'm'
-local hud_SurfaceEstimation = ternary(planet.surface ~= -1, round(core.getAltitude() - planet.surface) .. 'm', '<div style="color:red; font-weight:bold;">Not In List</div>')
+local hud_Altitude = format_number(round(core.getAltitude())) .. 'm'
+local hud_SurfaceEstimation = ternary(planet.surface ~= -1, format_number(round(core.getAltitude() - planet.surface)) .. 'm', '<div style="color:red; font-weight:bold;">Not In List</div>')
 local hud_AtmosphereDensity = round(unit.getAtmosphereDensity() * 100) .. '%'
 local hud_AirResistance = round(vec3(core.getWorldAirFrictionAcceleration()):len()) .. 'N'
 local constructMass = core.getConstructMass() * (1 + payloadOverhead / 100) -- kg
@@ -49,7 +57,7 @@ local reqThrust = constructMass * core.g() -- N
 local maxThrust = ternary(vtolPlane, Nav:maxForceUp(), Nav:maxForceForward()) -- N
 local ratioThrust = round(maxThrust / reqThrust - 1, 2) -- >1: Space possible / =1: Flight possible / <1: Flight not possible
 local maxMass = maxThrust / core.g() -- kg
-local hud_RemainingPayloadLift = ternary(constructMass > maxMass, '<div style="color:red; font-weight:bold;">', '<div>') .. round((maxMass - constructMass) / 1000, 3) .. 't</div>'
+local hud_RemainingPayloadLift = ternary(constructMass > maxMass, '<div style="color:red; font-weight:bold;">', '<div>') .. format_number(round((maxMass - constructMass) / 1000)) .. 't</div>'
 local hud_TelemeterDistance = ternary(telemeter.getDistance() == 0, 'N/A', round(telemeter.getDistance()) .. 'm')
 
 
@@ -79,12 +87,43 @@ hudHTMLBody[#hudHTMLBody + 1] =
 ]]
 
 
+-- Get AGG data and display them
+if antigrav ~= nil then 
+    local hud_AGGStatus = ternary(antigrav.getState() == 1, '<div class="on_g">on</div>', '<div class="off">off</div>')
+    local aggData = json.decode(antigrav.getData())
+    local hud_AGGPower = round(aggData.antiGPower * 100) .. '%'
+    --local hud_AGGField = math.floor(aggData.antiGravityField * 100) .. '%'
+    local hud_AGGAltitude = round(aggData.baseAltitude)
+    if db_extension_agg ~= nil then aggAltitudeTarget = db_extension_agg.getIntValue("agg_target_altitude") end
+
+    hudHTMLBody[#hudHTMLBody + 1] =
+    [[
+		<div class="primary control-container">
+			<p class="primary">&nbsp;</p>&nbsp;
+		</div>
+		<div class="primary control-container">
+			<p class="primary">AGG:</p>
+			]] .. hud_AGGStatus .. [[
+		</div>
+		<div class="primary control-container">
+			<p class="primary">&nbsp;&nbsp;&gt;&nbsp;Power:</p>
+			]] .. hud_AGGPower .. [[
+		</div>
+		<div class="primary control-container">
+			<p class="primary">&nbsp;&nbsp;&gt;&nbsp;Altitude:</p>
+			]] .. format_number(hud_AGGAltitude) .. ' (' .. format_number(math.floor(aggAltitudeTarget)) .. ') m' .. [[
+		</div>
+    ]]
+end
+
+
+-- Show speed information
 hudHTMLBody[#hudHTMLBody + 1] =
 [[
 		<div class="spacer"></div>
 		<div class="category">Speed...</div>
 		<div class="primary control-container">
-			<p class="primary">Speed: </p>
+			<p class="primary">Speed:</p>
 			]] .. velocity_kmh .. ' km/h' .. [[
 		</div>
 ]]
@@ -94,7 +133,7 @@ hudHTMLBody[#hudHTMLBody + 1] =
 hudHTMLBody[#hudHTMLBody + 1] = ternary(environmentID == 1,
 [[
 		<div class="primary control-container">
-			<p class="primary">Vertical Velocity: </p>
+			<p class="primary">Vertical Velocity:</p>
 			]] .. velocity_vertical .. ' m/s²' .. [[
 		</div>
 ]]
@@ -106,7 +145,7 @@ hudHTMLBody[#hudHTMLBody + 1] =
 		<div class="spacer"></div>
 		<div class="category">Braking...</div>
 		<div class="primary control-container">
-			<p class="primary">To full stop: </p>
+			<p class="primary">To full stop:</p>
 			]] .. hud_Speed0 .. [[
 		</div>
 ]]
@@ -116,7 +155,7 @@ hudHTMLBody[#hudHTMLBody + 1] =
 hudHTMLBody[#hudHTMLBody + 1] = ternary(brakeDistanceSpeed2000["time"] > 0, 
 [[
 		<div class="primary control-container">
-			<p class="primary">To 2000 km/h: </p>
+			<p class="primary">To 2000 km/h:</p>
 			]] .. hud_Speed2000 .. [[
 		</div>
 ]]
@@ -137,7 +176,7 @@ hudHTMLBody[#hudHTMLBody + 1] =
 			]] .. hud_FlightStyle .. [[
 		</div>
 		<div class="primary control-container">
-			<p class="primary">Locale Gravity: </p>
+			<p class="primary">Locale Gravity:</p>
 			]] .. hud_LocalGravity .. [[
 		</div>
 ]]
@@ -147,23 +186,30 @@ hudHTMLBody[#hudHTMLBody + 1] =
 hudHTMLBody[#hudHTMLBody + 1] = ternary(environmentID == 1, 
 [[
     	<div class="primary control-container">
-			<p class="primary">Sea Level: </p>
+			<p class="primary">Sea Level:</p>
 			]] .. hud_Altitude .. [[
 		</div>
           <div class="primary control-container">
-			<p class="primary">Estm. to surface: </p>
+			<p class="primary">Estm. to surface:</p>
 			]] .. hud_SurfaceEstimation .. [[
 		</div>
     	 <div class="primary control-container">
-			<p class="primary">Density: </p>
+			<p class="primary">Density:</p>
 			]] .. hud_AtmosphereDensity .. [[
 		</div>
           <div class="primary control-container">
-			<p class="primary">Air Resistance: </p>
+			<p class="primary">Air Resistance:</p>
 			]] .. hud_AirResistance .. [[
 		</div>
+]]
+, "")
+
+
+-- Show only on surface
+hudHTMLBody[#hudHTMLBody + 1] = ternary(surfaceLow, 
+[[
     	 <div class="primary control-container">
-			<p class="primary">Remaining Payload: </p>
+			<p class="primary">Remaining Payload:</p>
 			]] .. hud_RemainingPayloadLift .. [[
 		</div>
 ]]
@@ -174,7 +220,7 @@ hudHTMLBody[#hudHTMLBody + 1] = ternary(environmentID == 1,
 hudHTMLBody[#hudHTMLBody + 1] = ternary(telemeter.getDistance() >= 0, 
 [[
 		<div class="primary control-container">
-			<p class="primary">Obstacle Distance: </p>
+			<p class="primary">Obstacle Distance:</p>
 			]] .. hud_TelemeterDistance .. [[
 		</div>
 ]]
@@ -194,8 +240,8 @@ if (myFuelTanks["atmospheric fuel tank"] ~= nil or myFuelTanks["space fuel tank"
     for typ, tanks in pairs(myFuelTanks) do         
         for i, parameter in ipairs(tanks) do        
             local displayName = "N/A"
-            local displayVolume = round(parameter["curvolume"] / parameter["maxvolume"] * 100)
-            local displayVolumeLevel = round(parameter["curvolume"]) .. " / " .. round(parameter["maxvolume"]) .. "l"
+            local displayVolume = format_number(round(parameter["curvolume"] / parameter["maxvolume"] * 100))
+            local displayVolumeLevel = format_number(round(parameter["curvolume"])) .. " / " .. format_number(round(parameter["maxvolume"])) .. "l"
             
             if typ == "atmospheric fuel tank" then
             	displayName = "Atmo " .. i

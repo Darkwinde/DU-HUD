@@ -1,5 +1,106 @@
 -- Darkwinde START: library.start()
 
+-- Generic Initialization & Setup START
+
+-- Default parameter initialization
+function init()
+    version = "v0.3"
+    description = " - Minimalistic HUD from Darkwinde & Expugnator"
+    gravity = 9.81 -- m/s²
+    velocity = vec3(core.getWorldVelocity()) -- m/s²
+    velocity_kmh = round(vec3(core.getVelocity()):len() * 3.6) -- m/s²
+
+    
+    habitats = {'Atmosphere', 'Space', 'Spacedock'} -- Default environments
+    surfaceDistanceLow = {15, 5, 5}  -- m
+    surfaceDistanceLanding = {40, 20, 20} -- m
+    surfaceDistanceHigh = {80, 80, 80} -- m
+    surfaceSpeedLow = {1, 1, 1} -- m/s²
+    environment = getEnvironmentName() -- Initialize environment name
+    environmentID = getEnvironmentID() -- Initialize environment ID
+
+    
+    firstStart = true -- Indicator to show correct HUD messages
+    lockBrake = true -- Default handbrake active 
+    surfaceBrake = true -- Default handbrake near surface active
+    surfaceLow = true -- Default to initialize distance check near surface
+    landing = true -- Default to initialize distance check if landing   
+    verticalEngines = true -- Default vertical engines are deactivated on AGG use
+    
+    
+    hudHTMLMsg = {} -- Message variable
+end
+
+
+-- On initiated parameter perform setup
+function setup()
+    -- Get fuel tanks
+    myFuelTanks = getFuelTanks()
+
+    
+    
+    -- Check for element existence
+    local telemeterExists = false
+    for slotname, slot in pairs(unit) do
+        
+        if type(slot) == "table" and slot.getElementClass then
+            -- Mandatory: Telemeter
+            if slot.getElementClass():lower():find("telemeter") and slotname == "telemeter" then
+                telemeterExists = true
+            end
+
+            -- Optional: DataBank
+            if slot.getElementClass():lower():find("databank") and db_extension_agg == nil then
+                -- Check for extension - AGG Screen
+                if slot.hasKey("agg_target_altitude") == 1 then
+                    db_extension_agg = slot
+                end
+            end
+        end
+
+        -- Optional: Door Switch
+        if slotname == doorSwitchSlotName then
+            doorSwitch = slot
+            doorSwitch.deactivate()
+        end 
+    end
+
+    -- Display HUD critical message and initialize telemeter object with distance method
+    if not telemeterExists then
+        setHTMLMessage(hudHTMLMsg, "Telemeter missing!<br>Attach one to your flight seat!", "critical")
+
+        telemeter = {}
+    end
+
+
+    -- Check for high speed and unlock handbrake on sit down
+    if lockBrake and velocity_kmh > 50 then
+        lockBrake = not lockBrake
+    end
+    
+    -- Hide Default Panels START
+    unit.hide() -- Hide unit (commander seat) widget
+    core.hide() -- Hide core widget
+    _autoconf.hideCategoryPanels() -- Hide fuel tanks widget
+    if antigrav ~= nil then -- Hide AGG widget and get target altitude
+        if db_extension_agg ~= nil then
+            aggAltitudeTarget = db_extension_agg.getIntValue("agg_target_altitude") 
+        else
+            aggAltitudeTarget = antigrav.getBaseAltitude()
+        end
+        antigrav.setBaseAltitude(aggAltitudeTarget)
+        antigrav.hide()
+    end   
+
+
+    -- Start timer
+    unit.setTimer('HUD', 0.5)
+    unit.setTimer('FUEL', 5)
+end
+
+-- Generic Initialization & Setup END
+
+
 -- Generic Functions START
 
 -- Return dumped information in a humal readable string
@@ -39,6 +140,14 @@ function round(num, numDecimalPlaces)
     else
         return math.floor((num * mult + 0.5) / mult)
     end
+end
+
+
+-- Format numbers to look nice
+-- credit http://richard.warburton.it
+function format_number(n) 
+    local left,num,right = string.match(n,'^([^%d]*%d)(%d*)(,-)$')
+    return left..(num:reverse():gsub('(%d%d%d)','%1 '):reverse()) .. right
 end
 
 -- Generic Functions END
@@ -92,7 +201,9 @@ string.format([[
         .control-container {display:flex; justify-content:space-between; padding:0.5%%; }
         .category {color:#ffffff; font-size:1rem; text-align:center; margin:0.4rem;}
         .spacer {margin-top:1rem; border-top:1px solid #ffffff;}
-        .on {background-color:red; margin-left:10px; border-radius:50%%; width:22px; 
+        .on_g {background-color:green; margin-left:10px; border-radius:50%%; width:22px; 
+             height:22px; border:2px solid black; text-align:center;}
+        .on_r {background-color:red; margin-left:10px; border-radius:50%%; width:22px; 
              height:22px; border:2px solid black; text-align:center;}
         .off {background-color:none; margin-left:10px; border-radius:50%%; width:22px; 
              height:22px; border:2px solid transparent; text-align:center;}
@@ -139,7 +250,7 @@ end
 
 -- Get current environment information returned as ID or name
 function getEnvironmentID()
-    if unit.getAtmosphereDensity() > 0.1 then -- Atmo
+    if unit.getAtmosphereDensity() > 0.0 then -- Atmo
         return  1
     elseif core.g() >= gravity then -- Spacedock
         return 3
@@ -152,7 +263,7 @@ function getEnvironmentName(id)
         return habitats[id]
     end
     
-    if unit.getAtmosphereDensity() > 0.1 then -- Atmo
+    if unit.getAtmosphereDensity() > 0.0 then -- Atmo
         return  habitats[1]
     elseif core.g() >= gravity then -- Spacedock
        return habitats[3]
@@ -355,7 +466,7 @@ function Navigator.maxForceUp(self)
     local axisCRefDirection = vec3(self.core.getConstructOrientationUp())
     local verticalEngineTags = 'thrust analog vertical not_ground'
     local maxKPAlongAxis = self.core.getMaxKinematicsParametersAlongAxis(verticalEngineTags, {axisCRefDirection:unpack()})
-    if self.control.getAtmosphereDensity() == 0 then -- we are in space
+    if self.control.getAtmosphereDensity() <= 0.1 then -- we can use space engines
         return maxKPAlongAxis[3]
     else
         return maxKPAlongAxis[1]

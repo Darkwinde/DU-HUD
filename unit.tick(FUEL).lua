@@ -44,9 +44,9 @@ for typ, tanks in pairs(myFuelTanks) do
         end
 
         
-        local h = math.floor(consTime / 3600)
+        local h = round(consTime / 3600)
         local timeFrac1 = consTime - 3600 * h
-        local min = math.floor(timeFrac1 / 60)
+        local min = round(timeFrac1 / 60)
         local timeFrac2 = timeFrac1 - 60 * min
         local sec = round(timeFrac2)
         consTime = h .. "h:" ..min .. "m:" .. sec .. "s"

@@ -9,7 +9,8 @@ function Atlas()
                 name='Madis',
                 planetarySystemId=0,
                 radius=44300,
-                surface=-1        
+                surface=850,
+                spaceEngine=4500
             },
             [2]={
                 GM=157470826617,
@@ -18,7 +19,8 @@ function Atlas()
                 name='Alioth',
                 planetarySystemId=0,
                 radius=126068,
-                surface=0
+                surface=0,
+                spaceEngine=3500
             },
             [3]={
                 GM=11776905000,
@@ -27,7 +29,8 @@ function Atlas()
                 name='Thades',
                 planetarySystemId=0,
                 radius=49000,
-                surface=13600
+                surface=13600,
+                spaceEngine=21600
             },
             [4]={
                 GM=14893847582,
@@ -36,7 +39,8 @@ function Atlas()
                 name='Talemai',
                 planetarySystemId=0,
                 radius=57450,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [5]={
                 GM=16951680000,
@@ -45,7 +49,8 @@ function Atlas()
                 name='Feli',
                 planetarySystemId=0,
                 radius=60000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [6]={
                 GM=10502547741,
@@ -54,7 +59,8 @@ function Atlas()
                 name='Sicari',
                 planetarySystemId=0,
                 radius=51100,
-                surface=0
+                surface=0,
+                spaceEngine=-1
             },
             [7]={
                 GM=13033380591,
@@ -63,7 +69,8 @@ function Atlas()
                 name='Sinnen',
                 planetarySystemId=0,
                 radius=54950,
-                surface=400
+                surface=400,
+                spaceEngine=-1
             },
             [8]={
                 GM=18477723600,
@@ -72,7 +79,8 @@ function Atlas()
                 name='Teoma',
                 planetarySystemId=0,
                 radius=62000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [9]={
                 GM=18606274330,
@@ -81,7 +89,8 @@ function Atlas()
                 name='Jago',
                 planetarySystemId=0,
                 radius=61590,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [10]={
                 GM=78480000,
@@ -90,7 +99,8 @@ function Atlas()
                 name='Madis Moon 1',
                 planetarySystemId=0,
                 radius=10000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [11]={
                 GM=237402000,
@@ -99,7 +109,8 @@ function Atlas()
                 name='Madis Moon 2',
                 planetarySystemId=0,
                 radius=11000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [12]={
                 GM=265046609,
@@ -108,7 +119,8 @@ function Atlas()
                 name='Madis Moon 3',
                 planetarySystemId=0,
                 radius=15005,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [21]={
                 GM=2118960000,
@@ -117,7 +129,8 @@ function Atlas()
                 name='Alioth Moon 1',
                 planetarySystemId=0,
                 radius=30000,
-                surface=-1
+                surface=0,
+                spaceEngine=0
             },
             [22]={
                 GM=2165833514,
@@ -126,7 +139,8 @@ function Atlas()
                 name='Alioth Moon 4',
                 planetarySystemId=0,
                 radius=30330,
-                surface=-1
+                surface=0,
+                spaceEngine=0
             },
             [26]={
                 GM=68234043600,
@@ -135,7 +149,8 @@ function Atlas()
                 name='Sanctuary',
                 planetarySystemId=0,
                 radius=83400,
-                surface=0
+                surface=0,
+                spaceEngine=4300
             },
             [30]={
                 GM=211564034,
@@ -144,7 +159,8 @@ function Atlas()
                 name='Thades Moon 1',
                 planetarySystemId=0,
                 radius=14002,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [31]={
                 GM=264870000,
@@ -153,7 +169,8 @@ function Atlas()
                 name='Thades Moon 2',
                 planetarySystemId=0,
                 radius=15000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [40]={
                 GM=141264000,
@@ -162,7 +179,8 @@ function Atlas()
                 name='Talemai Moon 2',
                 planetarySystemId=0,
                 radius=12000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [41]={
                 GM=106830900,
@@ -171,7 +189,8 @@ function Atlas()
                 name='Talemai Moon 3',
                 planetarySystemId=0,
                 radius=11000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [42]={
                 GM=264870000,
@@ -180,7 +199,8 @@ function Atlas()
                 name='Talemai Moon 1',
                 planetarySystemId=0,
                 radius=15000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [50]={
                 GM=499917600,
@@ -189,7 +209,8 @@ function Atlas()
                 name='Feli Moon 1',
                 planetarySystemId=0,
                 radius=14000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [70]={
                 GM=396912600,
@@ -198,7 +219,8 @@ function Atlas()
                 name='Sinnen Moon 1',
                 planetarySystemId=0,
                 radius=17000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [100]={
                 GM=13975172474,
@@ -207,7 +229,8 @@ function Atlas()
                 name='Lacobus',
                 planetarySystemId=0,
                 radius=55650,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [101]={
                 GM=264870000,
@@ -216,7 +239,8 @@ function Atlas()
                 name='Lacobus Moon 3',
                 planetarySystemId=0,
                 radius=15000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [102]={
                 GM=444981600,
@@ -225,7 +249,8 @@ function Atlas()
                 name='Lacobus Moon 1',
                 planetarySystemId=0,
                 radius=18000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [103]={
                 GM=211503600,
@@ -234,7 +259,8 @@ function Atlas()
                 name='Lacobus Moon 2',
                 planetarySystemId=0,
                 radius=14000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [110]={
                 GM=9204742375,
@@ -243,7 +269,8 @@ function Atlas()
                 name='Symeon',
                 planetarySystemId=0,
                 radius=49050,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [120]={
                 GM=7135606629,
@@ -252,7 +279,8 @@ function Atlas()
                 name='Ion',
                 planetarySystemId=0,
                 radius=44950,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [121]={
                 GM=106830900,
@@ -261,7 +289,8 @@ function Atlas()
                 name='Ion Moon 1',
                 planetarySystemId=0,
                 radius=11000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             },
             [122]={
                 GM=176580000,
@@ -270,7 +299,8 @@ function Atlas()
                 name='Ion Moon 2',
                 planetarySystemId=0,
                 radius=15000,
-                surface=-1
+                surface=-1,
+                spaceEngine=-1
             }  
         }
     }

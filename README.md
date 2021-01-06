@@ -5,6 +5,7 @@ Dual Universe minimalistic HUD for Atmospheric and Space navigation
 ## Credits
 * Inspired and based on Dimencia's HUD implementation with extraordinary features; like interplanetary autopilot, automatic landing, door automation or fuel information. Check out his space: https://github.com/Dimencia/DU-Orbital-Hud
 * JayleBreak and his orbital maths/atlas: https://gitlab.com/JayleBreak/dualuniverse/-/tree/master/DUflightfiles/autoconf/custom
+* Richard Warburton and the way to make number look nice by function call (http://richard.warburton.it)
 * Expugnator for his collaborative work on this HUD implementation to keep it simple and stupid for all Dual Universe planet crash drivers :)
 <br/><br/>
 
