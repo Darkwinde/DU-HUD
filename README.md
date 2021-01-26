@@ -31,7 +31,8 @@ Dual Universe minimalistic HUD for Atmospheric and Space navigation
 * Space docking indicator / message
 * Show estimated distance to surface
 * Show estimated possible remaining payload based on current atmospheric environment and ship parameter
- * Show vertical velocity
+* Show vertical velocity
+* No fuel tank connection to commander seat unit required
 <br/><br/>
 
 ## Prerequisite
@@ -45,23 +46,38 @@ Dual Universe minimalistic HUD for Atmospheric and Space navigation
      1. The "Relay" is linked to the "Door" and "Force Field"
      1. Pushing the "Manual Switch" the door opens / closes and the force field is been activated / deactivated
      1. "Manual Switch" is linked to the command seat and slot is named "btnDoor" in the LUA editor
+* Fuel tank connection to commander seat unit
+    * Fuel tanks (atmo, space and rocket) are gathered from core element information list. 
+    * Therefor no direct link between commander seat and fuel tanks required. This saves slots for further purposes, like Anti Gravity Generator (AGG), data banks, manual switches or any other kind of extension.
+    * Just modify the user variables "coo", "fto", "fthAtmo", "fthSpace" and "fthRocket" in unit.start() according to your skill level
 <br/><br/>
 
 ## Installation
+**Auto Configuration File** 
+1. Download autoconf file: [/autoconf/minimalistic_hud_darkwinde_and_expugnator.conf](/autoconf/minimalistic_hud_darkwinde_and_expugnator.conf)
+1. Place file to the custom LUA auto configuration directory.<br/>
+Example game path: D:\Dual Universe\Game\data\lua\autoconf\custom
+1. In case DU was already started before
+    1. Right click on commander seat
+    1. Select "Advanced" > "Update custom autoconf list"
+1.Load scipt into commander seat
+    1. Right click on commander seat
+    1. Select "Advanced" > "Run custom autoconfigure" > "HUD from Darkwinde & Expugnator (vXX.YY.ZZ)"
+![Autoconf](/media/Autoconf.png)
+1. Confirm warning
+1. Take a seat and have a nice flight.
+
+<br/><br/>
+
+**File by File** 
 1. Run auto configuration script 
     1. Right click on commander seat
     1. Select "Run default autoconfigure" > "(Pilot) Flying construct"
 1. Ensure that "Telemeter" element is linked to the commander seat. In case you are using a "Manual Switch" to control a door and force field by a relay, then name it to "btnDoor" in the LUA editor
 ![Lua 1](/media/LuaEditor_1.png)
 <br/><br/>
-
-
-**File by File** 
 <br/>
-Copy and past each LUA file content to the according section of your commander seat.
-<br/><br/>
-
-*"CTRL + L" on commander seat to open ingame editor*
+1. Copy and past each LUA file content to the according section of your commander seat. *"CTRL + L" on commander seat to open ingame editor*
 <br/><br/>
 Example for the file "library.start.lua":<br/>
 
@@ -77,6 +93,7 @@ Example for the file "library.start.lua":<br/>
     * If I have defined multiple filter targeting the same event, they are distinguished by a underscore plus counter. E.g.: library.start_**1**.lua and library.start_**2**.lua would mean you have two start() filter in library.
 1. Then you finished, do not forget set press "APPLY" to confirm changes.
 1. Take a seat and have a nice flight.
+
 <br/><br/>
 ![Lua 1](/media/LuaEditor_2.png)
 <br/>
@@ -129,8 +146,4 @@ Example for the file "library.start.lua":<br/>
 <br/><br/>
 
 ## Known Issues & Limitations
-* Pressing "TAB" to call native game overlay with sidebar (mouse mode) and after mouse click on the gray overlay will cause massive lags
-    * Also reproducible with other HTML overlays. 
-    Therefor looks like a general issue from the game / design mechanic.
-    * Will try to figure out, if replacing relevant information gives better performance instead of re-building overlay all the time
 * Not tested with cockpits

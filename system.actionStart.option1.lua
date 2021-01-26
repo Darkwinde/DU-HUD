@@ -8,6 +8,7 @@ lockBrake = not lockBrake
 
 if not lockBrake then
     brakeInput = 0
+    docked = false
 
     local environmentParameter = getEnvironmentParameter(environmentID)        
     unit.setEngineThrust("vertical thrust", 1) -- default tags are in lower case    

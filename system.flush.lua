@@ -8,9 +8,11 @@ local environmentParameter = getEnvironmentParameter(environmentID)
 
 
 -- Check if telemeter unit exists
-if telemeter ~= nil then
+if telemeterExists then
     landing = telemeter.getDistance() > 0 and telemeter.getDistance() < environmentParameter["surfaceDistanceLanding"]
     surfaceLow = telemeter.getDistance() > 0 and telemeter.getDistance() <= environmentParameter["surfaceDistanceLow"]
+else
+    landing, surfaceLow, surfaceBrake = false , false, false
 end
 
 
@@ -25,7 +27,7 @@ end
 if lockBrake then
     brakeInput = 1
     
-    if surfaceLow then
+    if surfaceLow or docked then
         unit.setEngineThrust("vertical thrust", 0) -- default tags are in lower case and space seperated
         unit.deactivateGroundEngineAltitudeStabilization()
     end
@@ -48,8 +50,9 @@ end
 
 -- In space it is not necessary to use engine stabilization / maneuver engine at high speed
 if (environmentID == 2 and velocity_kmh > 5000) or not verticalEngines then
-    unit.setEngineThrust("vertical thrust", 0)
-    unit.deactivateGroundEngineAltitudeStabilization()
+    --unit.setEngineThrust("vertical thrust", 0)
+    Nav:setEngineCommand("vertical thrust", vec3.zero, vec3.zero)
+    --unit.deactivateGroundEngineAltitudeStabilization()
 end
 
 
@@ -63,18 +66,18 @@ if antigrav ~= nil then
         unit.deactivateGroundEngineAltitudeStabilization()
         
         -- Stop oscillate effect around target altitude
-        if aggAltitudeTarget == aggData.baseAltitude and core.g() < 0.015 and velocity_kmh >= 1 then
+        if aggAltitudeTarget == aggData.baseAltitude and core.g() < 0.1 and velocity_kmh >= 1 then
             brakeInput = 1
         else
             
             -- Stop oscillate effect by short braking on high amplitude level
             -- Atmo brakes are not direcly at full force, therefor oscillate effect takes longer
-            if aggAltitudeTarget ~= aggData.baseAltitude and core.g() < 0.015 and velocity_kmh > 15 then
+            if aggAltitudeTarget ~= aggData.baseAltitude and core.g() < 0.1 and velocity_kmh > 16 then
                 brakeInput = 1
             else
                 brakeInput = 0
             end
-        end  
+        end
     end
 end
 -- Darkwinde END: system.flush()

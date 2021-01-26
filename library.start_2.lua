@@ -280,7 +280,7 @@ function Atlas()
                 planetarySystemId=0,
                 radius=44950,
                 surface=-1,
-                spaceEngine=-1
+                spaceEngine=6550
             },
             [121]={
                 GM=106830900,
@@ -289,8 +289,8 @@ function Atlas()
                 name='Ion Moon 1',
                 planetarySystemId=0,
                 radius=11000,
-                surface=-1,
-                spaceEngine=-1
+                surface=0,
+                spaceEngine=0
             },
             [122]={
                 GM=176580000,
@@ -299,8 +299,8 @@ function Atlas()
                 name='Ion Moon 2',
                 planetarySystemId=0,
                 radius=15000,
-                surface=-1,
-                spaceEngine=-1
+                surface=-1900,
+                spaceEngine=0
             }  
         }
     }

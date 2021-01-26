@@ -1,3 +1,16 @@
+Version 0.3.1
+* Autoconf file added to repro for easier use
+* Bugfixes
+    * Corrected Telemeter existence checks
+    * If no Telemeter was connected to the commander seat, condition was preventing thrust control
+    * Docking will no longer activate vertical engines and push ship away
+* Optimizations
+    * Changed space surface low default parameter from 5m to 1m
+    * Changed way how vertical engine been deactivation (ALT+2)
+    * AGG max speed and max gravity increased for faster altitude stabilization
+
+---
+
 Version 0.3
 * AGG Support
     * Turn on and off by game default key bind (ALT + G)

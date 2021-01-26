@@ -4,30 +4,31 @@
 
 -- Default parameter initialization
 function init()
-    version = "v0.3"
+    version = "v0.3.1"
     description = " - Minimalistic HUD from Darkwinde & Expugnator"
     gravity = 9.81 -- m/s²
     velocity = vec3(core.getWorldVelocity()) -- m/s²
     velocity_kmh = round(vec3(core.getVelocity()):len() * 3.6) -- m/s²
 
-    
+
     habitats = {'Atmosphere', 'Space', 'Spacedock'} -- Default environments
-    surfaceDistanceLow = {15, 5, 5}  -- m
+    surfaceDistanceLow = {15, 1, 1}  -- m
     surfaceDistanceLanding = {40, 20, 20} -- m
     surfaceDistanceHigh = {80, 80, 80} -- m
     surfaceSpeedLow = {1, 1, 1} -- m/s²
     environment = getEnvironmentName() -- Initialize environment name
     environmentID = getEnvironmentID() -- Initialize environment ID
 
-    
+
     firstStart = true -- Indicator to show correct HUD messages
-    lockBrake = true -- Default handbrake active 
+    lockBrake = true -- Default handbrake active
     surfaceBrake = true -- Default handbrake near surface active
     surfaceLow = true -- Default to initialize distance check near surface
-    landing = true -- Default to initialize distance check if landing   
+    landing = true -- Default to initialize distance check if landing
+    docked = true -- Default docked mode
     verticalEngines = true -- Default vertical engines are deactivated on AGG use
-    
-    
+
+
     hudHTMLMsg = {} -- Message variable
 end
 
@@ -37,10 +38,10 @@ function setup()
     -- Get fuel tanks
     myFuelTanks = getFuelTanks()
 
-    
-    
+
+
     -- Check for element existence
-    local telemeterExists = false
+    telemeterExists = false
     for slotname, slot in pairs(unit) do
         
         if type(slot) == "table" and slot.getElementClass then
@@ -68,8 +69,6 @@ function setup()
     -- Display HUD critical message and initialize telemeter object with distance method
     if not telemeterExists then
         setHTMLMessage(hudHTMLMsg, "Telemeter missing!<br>Attach one to your flight seat!", "critical")
-
-        telemeter = {}
     end
 
 
@@ -81,7 +80,7 @@ function setup()
     -- Hide Default Panels START
     unit.hide() -- Hide unit (commander seat) widget
     core.hide() -- Hide core widget
-    _autoconf.hideCategoryPanels() -- Hide fuel tanks widget
+    if _autoconf ~= nil then _autoconf.hideCategoryPanels() end -- Hide auto DU widget
     if antigrav ~= nil then -- Hide AGG widget and get target altitude
         if db_extension_agg ~= nil then
             aggAltitudeTarget = db_extension_agg.getIntValue("agg_target_altitude") 
@@ -103,7 +102,7 @@ end
 
 -- Generic Functions START
 
--- Return dumped information in a humal readable string
+-- Return dumped information in a human readable string
 function dump(o)
     if type(o) == 'table' then
         local s = '{ '

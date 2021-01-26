@@ -66,8 +66,4 @@ for typ, tanks in pairs(myFuelTanks) do
     end
 end
 
-
-
-
-
 -- Darkwinde END: unit.tick(FUEL)

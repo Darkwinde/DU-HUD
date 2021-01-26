@@ -1,6 +1,5 @@
 -- Darkwinde START: unit.tick(HUD)
 
-
 -- UPDATE GLOBALS START
 up = vec3(core.getWorldVertical()) * -1
 velocity = vec3(core.getWorldVelocity())
@@ -12,6 +11,8 @@ environmentID = getEnvironmentID()
 
 systemReference = PlanetRef()(Atlas())[0]
 planet = systemReference:closestBody(core.getConstructWorldPos())
+
+if telemeterExists then obstacleDistance = telemeter.getDistance() else obstacleDistance = 0 end
 -- UPDATE GLOBALS END
 
 
@@ -28,7 +29,8 @@ if environmentID == 3 then -- Spacedock
         end
         
         setHTMLMessage(hudHTMLMsg, "You are docked!!!", "ok")
-        lockBrake = true
+		lockBrake = true
+		docked = true
         firstStart = not firstStart
     end
 else -- Atmo & Space
@@ -58,7 +60,7 @@ local maxThrust = ternary(vtolPlane, Nav:maxForceUp(), Nav:maxForceForward()) --
 local ratioThrust = round(maxThrust / reqThrust - 1, 2) -- >1: Space possible / =1: Flight possible / <1: Flight not possible
 local maxMass = maxThrust / core.g() -- kg
 local hud_RemainingPayloadLift = ternary(constructMass > maxMass, '<div style="color:red; font-weight:bold;">', '<div>') .. format_number(round((maxMass - constructMass) / 1000)) .. 't</div>'
-local hud_TelemeterDistance = ternary(telemeter.getDistance() == 0, 'N/A', round(telemeter.getDistance()) .. 'm')
+local hud_ObstacleDistance = ternary(obstacleDistance == 0, 'N/A', round(obstacleDistance) .. 'm')
 
 
 --local hud_Acceleration = round((vec3(core.getWorldAcceleration()):len() / gravity), 1) .. 'g'
@@ -217,11 +219,11 @@ hudHTMLBody[#hudHTMLBody + 1] = ternary(surfaceLow,
 
 
 -- Show only near ground
-hudHTMLBody[#hudHTMLBody + 1] = ternary(telemeter.getDistance() >= 0, 
+hudHTMLBody[#hudHTMLBody + 1] = ternary(obstacleDistance >= 0, 
 [[
 		<div class="primary control-container">
 			<p class="primary">Obstacle Distance:</p>
-			]] .. hud_TelemeterDistance .. [[
+			]] .. hud_ObstacleDistance .. [[
 		</div>
 ]]
 , "")
@@ -284,10 +286,5 @@ hudHTMLBody[#hudHTMLBody + 1] =
 local content = getHTMLHeader() .. orbitinterface() .. table.concat(hudHTMLBody, "")  .. [[<div class="msg">]] .. table.concat(hudHTMLMsg, "") .. [[</div>]] .. getHTMLFooter()
 system.setScreen(content)
 system.showScreen(1)
-
-
-
-
-
 
 -- Darkwinde END: unit.tick(HUD)
